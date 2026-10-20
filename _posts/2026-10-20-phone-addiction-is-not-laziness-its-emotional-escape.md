@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Phone Addiction Is Not Laziness. It's Emotional Escape.
+title: Phone Addiction Is Not Laziness. It's an Emotional Escape.
 description: >-
   Phone addiction isn't always about laziness or poor discipline. Explore how
   emotional escape, stress, boredom, and procrastination can influence our phone
