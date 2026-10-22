@@ -4543,21 +4543,14 @@ const {
 
 
           const {
-            error: metadataError
-          } =
-            await supabaseClient.auth.updateUser({
-
-              data: {
-
-                display_name:
-                  name,
-
-                username:
-                  username
-
-              }
-
-            });
+  error: metadataError
+} =
+  await supabaseClient.auth.updateUser({
+    data: {
+      display_name: name,
+      username: existingUsername || username
+    }
+  });
 
 
           if (
