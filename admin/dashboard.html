@@ -1405,6 +1405,83 @@
     </div>
 
 
+    
+<!-- =========================
+     DISPLAY-NAME HISTORY
+========================= -->
+
+<h2 class="section-title">
+  Display-Name History
+</h2>
+
+<div class="users-card">
+
+  <p class="article-analytics-intro">
+    Review previous and new display names for DissentVerse accounts.
+  </p>
+
+  <button
+    type="button"
+    id="refreshHistoryButton"
+    style="
+      padding:10px 16px;
+      margin-bottom:16px;
+      border:1px solid #eadfea;
+      border-radius:999px;
+      background:#faf4f8;
+      color:#8f2860;
+      font-weight:700;
+      cursor:pointer;
+    "
+  >
+    Refresh History
+  </button>
+
+  <div
+    id="historyLoading"
+    class="empty-users"
+  >
+    Display-name history will load here.
+  </div>
+
+  <div
+    id="historyError"
+    class="article-error"
+    style="display:none;"
+  ></div>
+
+  <div
+    id="historyEmpty"
+    class="empty-users"
+    style="display:none;"
+  >
+    No display-name changes recorded yet.
+  </div>
+
+  <div
+    id="historyTableWrap"
+    style="display:none;"
+  >
+    <table class="users-table">
+
+      <thead>
+        <tr>
+          <th>Account ID</th>
+          <th>Previous Name</th>
+          <th>New Name</th>
+          <th>Changed At</th>
+        </tr>
+      </thead>
+
+      <tbody id="historyTableBody"></tbody>
+
+    </table>
+  </div>
+
+</div>
+
+
+
     <!-- =========================
          ADMIN TOOLS
     ========================== -->
