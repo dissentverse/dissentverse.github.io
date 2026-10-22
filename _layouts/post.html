@@ -4461,48 +4461,41 @@ profileUsername.readOnly =
           }
 
 
-          const usernameChanged =
-            username !==
-            String(
-              currentProfile.username ||
-              ""
-            ).toLowerCase();
+          const existingUsername =
+  String(
+    currentProfile.username || ""
+  ).trim().toLowerCase();
 
+const usernameChanged =
+  username !== existingUsername;
 
-          if (
-            usernameChanged
-          ) {
+// An assigned username is permanent.
+// Only check availability when assigning one for the first time.
+if (
+  !existingUsername &&
+  usernameChanged
+) {
+  const {
+    data: usernameAvailable,
+    error: usernameCheckError
+  } =
+    await supabaseClient.rpc(
+      "is_username_available",
+      {
+        candidate: username
+      }
+    );
 
-            const {
-              data: usernameAvailable,
-              error: usernameCheckError
-            } =
-              await supabaseClient.rpc(
-                "is_username_available",
-                {
-                  candidate:
-                    username
-                }
-              );
+  if (usernameCheckError) {
+    throw usernameCheckError;
+  }
 
-
-            if (
-              usernameCheckError
-            ) {
-
-              throw usernameCheckError;
-            }
-
-
-            if (
-              usernameAvailable !== true
-            ) {
-
-              throw new Error(
-                "That username is already taken. Please choose another."
-              );
-            }
-          }
+  if (usernameAvailable !== true) {
+    throw new Error(
+      "That username is already taken. Please choose another."
+    );
+  }
+}
 
 
           const {
