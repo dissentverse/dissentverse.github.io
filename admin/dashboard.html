@@ -1660,6 +1660,67 @@
   }
 
 
+  
+  /* =========================
+     DISPLAY-NAME HISTORY
+  ========================== */
+
+  async function loadDisplayNameHistory() {
+    const loading = document.getElementById("historyLoading");
+    const errorBox = document.getElementById("historyError");
+    const emptyBox = document.getElementById("historyEmpty");
+    const tableWrap = document.getElementById("historyTableWrap");
+    const tableBody = document.getElementById("historyTableBody");
+
+    loading.style.display = "block";
+    loading.textContent = "Loading display-name history...";
+    errorBox.style.display = "none";
+    emptyBox.style.display = "none";
+    tableWrap.style.display = "none";
+
+    try {
+      const { data, error } = await supabaseClient
+        .from("profile_display_name_history")
+        .select("profile_id, old_display_name, new_display_name, changed_at")
+        .order("changed_at", { ascending: false })
+        .limit(100);
+
+      if (error) {
+        throw error;
+      }
+
+      loading.style.display = "none";
+
+      if (!data || data.length === 0) {
+        emptyBox.style.display = "block";
+        return;
+      }
+
+      tableBody.innerHTML = data.map(row => `
+        <tr>
+          <td>${escapeHtml(row.profile_id || "—")}</td>
+          <td>${escapeHtml(row.old_display_name || "—")}</td>
+          <td>${escapeHtml(row.new_display_name || "—")}</td>
+          <td>${escapeHtml(formatDate(row.changed_at))}</td>
+        </tr>
+      `).join("");
+
+      tableWrap.style.display = "block";
+
+    } catch (error) {
+      console.error("Display-name history error:", error);
+      loading.style.display = "none";
+      errorBox.textContent = "Unable to load display-name history. Please try again.";
+      errorBox.style.display = "block";
+    }
+  }
+
+  document
+    .getElementById("refreshHistoryButton")
+    .addEventListener("click", loadDisplayNameHistory);
+
+
+
   /* =========================
      SHOW ADMIN
   ========================== */
