@@ -4255,8 +4255,11 @@ site-search-highlight {
 
 
           profileUsername.value =
-            profile.username ||
-            "";
+  profile.username ||
+  "";
+
+profileUsername.readOnly =
+  Boolean(profile.username);
 
 
           profileEmail.value =
