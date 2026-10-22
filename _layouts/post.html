@@ -4498,30 +4498,29 @@ if (
 }
 
 
-          const {
-            error: updateError
-          } =
-            await supabaseClient
-              .from("profiles")
-              .update({
+          
+const profileUpdates = {
+  display_name: name,
+  is_anonymous: false,
+  updated_at: new Date().toISOString()
+};
 
-                display_name:
-                  name,
+// Only assign a username if the user doesn't have one yet.
+if (!existingUsername) {
+  profileUpdates.username = username;
+}
 
-                username:
-                  username,
+const {
+  error: updateError
+} =
+  await supabaseClient
+    .from("profiles")
+    .update(profileUpdates)
+    .eq(
+      "id",
+      session.user.id
+    );
 
-                is_anonymous:
-                  false,
-
-                updated_at:
-                  new Date().toISOString()
-
-              })
-              .eq(
-                "id",
-                session.user.id
-              );
 
 
           if (
