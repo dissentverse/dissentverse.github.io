@@ -1480,6 +1480,68 @@
 
 </div>
 
+    
+<!-- =========================
+     SECURITY THREAT LOGS
+========================== -->
+
+<h2 class="section-title">
+  Security Threat Logs
+</h2>
+
+<div class="users-card">
+
+  <p class="article-analytics-intro">
+    Review security events recorded by DissentVerse.
+  </p>
+
+  <button
+    type="button"
+    id="refreshSecurityLogsButton"
+    style="padding:10px 16px; margin-bottom:16px; border:1px solid #eadfea; border-radius:999px; background:#faf4f8; color:#8f2860; font-weight:700; cursor:pointer;"
+  >
+    Refresh Security Logs
+  </button>
+
+  <div id="securityLogsLoading" class="empty-users">
+    Security logs will load here.
+  </div>
+
+  <div
+    id="securityLogsError"
+    class="article-error"
+    style="display:none;"
+  ></div>
+
+  <div
+    id="securityLogsEmpty"
+    class="empty-users"
+    style="display:none;"
+  >
+    No security logs recorded yet.
+  </div>
+
+  <div
+    id="securityLogsTableWrap"
+    style="display:none;"
+  >
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>Severity</th>
+          <th>Description</th>
+          <th>User ID</th>
+          <th>Recorded At</th>
+        </tr>
+      </thead>
+      <tbody id="securityLogsTableBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+
 
 
     <!-- =========================
@@ -1719,6 +1781,60 @@
     .getElementById("refreshHistoryButton")
     .addEventListener("click", loadDisplayNameHistory);
 
+  
+  async function loadSecurityLogs() {
+    const loading = document.getElementById("securityLogsLoading");
+    const errorBox = document.getElementById("securityLogsError");
+    const emptyBox = document.getElementById("securityLogsEmpty");
+    const tableWrap = document.getElementById("securityLogsTableWrap");
+    const tableBody = document.getElementById("securityLogsTableBody");
+
+    loading.style.display = "block";
+    loading.textContent = "Loading security logs...";
+    errorBox.style.display = "none";
+    emptyBox.style.display = "none";
+    tableWrap.style.display = "none";
+
+    try {
+      const { data, error } = await supabaseClient
+        .from("security_threat_logs")
+        .select("event_type, severity, description, user_id, created_at")
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      loading.style.display = "none";
+
+      if (!data || data.length === 0) {
+        emptyBox.style.display = "block";
+        return;
+      }
+
+      tableBody.innerHTML = data.map(row => `
+        <tr>
+          <td>${escapeHtml(row.event_type || "—")}</td>
+          <td>${escapeHtml(row.severity || "—")}</td>
+          <td>${escapeHtml(row.description || "—")}</td>
+          <td>${escapeHtml(row.user_id || "—")}</td>
+          <td>${escapeHtml(formatDate(row.created_at))}</td>
+        </tr>
+      `).join("");
+
+      tableWrap.style.display = "block";
+    } catch (error) {
+      console.error("Security logs error:", error);
+      loading.style.display = "none";
+      errorBox.textContent = "Unable to load security logs. Please try again.";
+      errorBox.style.display = "block";
+    }
+  }
+
+  document
+    .getElementById("refreshSecurityLogsButton")
+    .addEventListener("click", loadSecurityLogs);
+
+
 
 
   /* =========================
@@ -1737,6 +1853,8 @@
       "flex";
 
     loadDisplayNameHistory();
+    
+    loadSecurityLogs();
 
   }
 
