@@ -9,7 +9,7 @@ description: >-
 
   #CareerChoices #GovernmentJobs #CareerPressure #IndianParents #StudentLife #Youth #Career
 writer_name: DissentVerse
-featured_image: /images/uploads/img-20261031-wa0001.jpg
+featured_image: /images/uploads/img-20261031-wa0002.jpg
 date: 31-10-2026
 ---
 *“Do you know Sharma Ji's son got a government job? They were so happy! They've invited us to their home for the celebration. Now see how people will respect them. He'll even get better marriage proposals. And look at you. You're just wasting your time on such a useless course.*
